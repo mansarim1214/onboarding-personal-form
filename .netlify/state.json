@@ -1,7 +1,6 @@
 {
 	"geolocation": {
 		"data": {
-			"city": "Multan",
 			"country": {
 				"code": "PK",
 				"name": "Pakistan"
@@ -11,11 +10,10 @@
 				"name": "Punjab"
 			},
 			"timezone": "Asia/Karachi",
-			"latitude": 30.16,
-			"longitude": 71.7165,
-			"postalCode": "60000"
+			"latitude": 31.558,
+			"longitude": 74.3587
 		},
-		"timestamp": 1760950591423
+		"timestamp": 1761023763373
 	},
-	"siteId": "689cfe43-55f7-4293-8ae5-69ba83917398"
+	"siteId": "c9801a71-478b-4a1e-af74-a12cfb59411e"
 }

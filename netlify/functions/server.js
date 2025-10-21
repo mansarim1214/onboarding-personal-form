@@ -7,7 +7,9 @@ import serverless from "serverless-http";
 
 dotenv.config();
 
+// ✅ Create Express app first
 const app = express();
+
 app.use(cors());
 app.use(
   express.json({
@@ -16,6 +18,11 @@ app.use(
     },
   })
 );
+
+// ✅ Health check (useful for testing)
+app.get("/api/ping", (req, res) => {
+  res.json({ ok: true, message: "Serverless function running ✅" });
+});
 
 // ======== DIDIT CONFIG ========
 const DIDIT_API = "https://verification.didit.me/v2";
@@ -27,7 +34,7 @@ const WEBHOOK_SECRET = process.env.DIDIT_WEBHOOK_SECRET;
 // ======== TEMP IN-MEMORY CACHE ========
 const kycCache = new Map();
 
-// ✅ IMPORTANT: Use router
+// ======== EXPRESS ROUTER ========
 const router = express.Router();
 
 // ======== ROUTE: Create DIDIT Session ========
@@ -80,13 +87,14 @@ router.post("/didit-webhook", (req, res) => {
 
     const { session_id, vendor_data, status } = req.body;
     if (vendor_data) {
-      kycCache.set(vendor_data, {
+      kycCache.set(vendor_data.toLowerCase(), {
         status,
         session_id,
         updatedAt: new Date().toISOString(),
       });
     }
 
+    console.log("📩 Webhook received for:", vendor_data);
     res.sendStatus(200);
   } catch (err) {
     console.error("Webhook error:", err.message);
@@ -145,8 +153,8 @@ router.post("/send-kyc-link", async (req, res) => {
   }
 });
 
-// ✅ Mount router for Netlify base path
-app.use("/.netlify/functions/server/api", router);
-app.use("/api", router); // also support local testing
+// ✅ Mount router for Netlify path
+app.use("/api", router);
 
+// ✅ Export for Netlify
 export const handler = serverless(app);
