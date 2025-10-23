@@ -644,12 +644,12 @@ export default function Step7_BeneficiaryBankInformation({
 
         {/* Navigation Buttons */}
         <div className="flex gap-3 mt-8">
-          <button
+          {/* <button
             onClick={prevStep}
             className="bg-[#2a2a33] hover:bg-[#32323c] text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
             Back
-          </button>
+          </button> */}
 
           <button
             onClick={handleNext}
