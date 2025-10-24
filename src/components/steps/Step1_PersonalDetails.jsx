@@ -21,6 +21,22 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
   const [kycUrl, setKycUrl] = useState(null);
   const [showKycModal, setShowKycModal] = useState(false);
 
+  // 🔹 Local alert modal state
+  const [alertData, setAlertData] = useState({
+    visible: false,
+    title: "",
+    message: "",
+    type: "info",
+  });
+
+  const showAlert = (title, message, type = "info") => {
+    setAlertData({ visible: true, title, message, type });
+  };
+
+  const closeAlert = () => {
+    setAlertData({ ...alertData, visible: false });
+  };
+
   // Load existing data
   useEffect(() => {
     if (formData) {
@@ -58,6 +74,7 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      showAlert("Missing Information", "Please fill in all required fields.", "warning");
       return;
     }
 
@@ -78,7 +95,7 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
       const result = await res.json();
       if (!result.url) {
         setIsVerifying(false);
-        alert("Failed to start KYC session.");
+        showAlert("KYC Error", "Failed to start KYC session. Please try again later.", "error");
         return;
       }
 
@@ -98,7 +115,7 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
             clearInterval(interval);
             setShowKycModal(false);
             setIsVerifying(false);
-            alert("✅ KYC verification completed!");
+            showAlert("✅ Verification Complete", "Your KYC verification was approved successfully!", "success");
             updateFormData(data);
             nextStep();
           }
@@ -109,7 +126,7 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
     } catch (err) {
       console.error("KYC error:", err);
       setIsVerifying(false);
-      alert("Something went wrong with KYC setup.");
+      showAlert("Unexpected Error", "Something went wrong while setting up KYC.", "error");
     }
   };
 
@@ -210,9 +227,13 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
             {isVerifying ? "Verifying..." : "Next"}
           </button>
         </div>
+
+
+
+        
       </div>
 
-      {/* 🔹 Reusable KYC Modal */}
+      {/* 🔹 KYC Modal */}
       {showKycModal && (
         <DiditKycModal
           url={kycUrl}
@@ -221,6 +242,34 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
             setIsVerifying(false);
           }}
         />
+      )}
+
+      {/* 🔸 Error / Info Modal */}
+      {alertData.visible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
+          <div className="bg-[#2a2a33] text-white p-6 rounded-lg shadow-lg w-96">
+            <h2
+              className={`text-xl font-semibold mb-2 ${
+                alertData.type === "error"
+                  ? "text-red-400"
+                  : alertData.type === "success"
+                  ? "text-green-400"
+                  : alertData.type === "warning"
+                  ? "text-yellow-400"
+                  : "text-blue-400"
+              }`}
+            >
+              {alertData.title}
+            </h2>
+            <p className="text-gray-200 mb-4">{alertData.message}</p>
+            <button
+              onClick={closeAlert}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition duration-200"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
