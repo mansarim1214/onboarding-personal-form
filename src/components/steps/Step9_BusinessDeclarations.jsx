@@ -11,7 +11,7 @@ export default function Step9_BusinessDeclarations({
     operatesAsHedgeFund: "",
     operatesAsFinancialInstitution: "",
     hasHighRiskClients: "",
-    highRiskClientOptions: [],
+
     statementMade: false,
     shareholdersRegisterAttached: false,
     organizationalChartAttached: false,
@@ -157,6 +157,7 @@ export default function Step9_BusinessDeclarations({
             </div>
           </div>
 
+          
           {/* 4. High-Risk Clients */}
           <div>
             <div className="flex items-start gap-4">
@@ -167,50 +168,36 @@ export default function Step9_BusinessDeclarations({
               </p>
             </div>
 
-            {data.hasHighRiskClients === "Yes" && (
-              <div className="mt-5 ml-8 flex flex-col gap-2">
-                {[
-                  "Accepting assets suspected to be criminal proceeds",
-                  "Business with known or suspected terrorist/criminal organizations",
-                  "Maintaining anonymous or shell bank accounts",
-                  "Accepting assets from individuals below age 18",
-                  "Accepting assets from individuals above 65 with low income",
-                  "Binary Options",
-                  "Banknote sales",
-                  "Virtual mixers",
-                  "PEPs",
-                  "Marijuana or drug-related activities",
-                  "Shell Banks",
-                  "Correspondent Banks",
-                  "Arms/Defense",
-                  "Pirated audio/video content",
-                  "Adult Entertainment",
-                  "Counterfeit goods",
-                  "Pyramid schemes",
-                ].map((option, idx) => (
-                  <label
-                    key={idx}
-                    className="flex items-start gap-2 text-gray-300"
-                  >
-                    <input
-                      type="checkbox"
-                      className="mt-1 accent-blue-500"
-                      checked={data.highRiskClientOptions?.includes(option) || false}
-                      onChange={(e) => {
-                        const updated = data.highRiskClientOptions || [];
-                        const newOptions = e.target.checked
-                          ? [...updated, option]
-                          : updated.filter((i) => i !== option);
-                        const newData = { ...data, highRiskClientOptions: newOptions };
-                        setData(newData);
-                        updateFormData(newData);
-                      }}
-                    />
-                    <span>{option}</span>
-                  </label>
-                ))}
-              </div>
-            )}
+            {/* Always visible descriptive list */}
+            <div className="mt-5 ml-8">
+              <p className="text-gray-300 mb-3">
+                Examples of high-risk client activities include:
+              </p>
+              <ul className="list-disc list-inside text-gray-400 space-y-1 text-sm">
+                <li>Accepting assets suspected to be criminal proceeds</li>
+                <li>
+                  Business with known or suspected terrorist/criminal
+                  organizations
+                </li>
+                <li>Maintaining anonymous or shell bank accounts</li>
+                <li>Accepting assets from individuals below age 18</li>
+                <li>
+                  Accepting assets from individuals above 65 with low income
+                </li>
+                <li>Binary Options</li>
+                <li>Banknote sales</li>
+                <li>Virtual mixers</li>
+                <li>PEPs</li>
+                <li>Marijuana or drug-related activities</li>
+                <li>Shell Banks</li>
+                <li>Correspondent Banks</li>
+                <li>Arms/Defense</li>
+                <li>Pirated audio/video content</li>
+                <li>Adult Entertainment</li>
+                <li>Counterfeit goods</li>
+                <li>Pyramid schemes</li>
+              </ul>
+            </div>
           </div>
         </div>
 

@@ -5,10 +5,10 @@ export default function DiditKycModal({ url, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-white w-[760px] h-[880px] rounded-xl overflow-hidden relative shadow-2xl">
+      <div className=" w-[760px] h-[800px] rounded-xl overflow-hidden relative shadow-2xl">
         {/* Loader while iframe loads */}
         {!isLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white">
+          <div className="absolute inset-0 flex items-center justify-center ">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
