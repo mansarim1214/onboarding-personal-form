@@ -10,7 +10,7 @@ export default function DiditKycModal({ url, onClose, onComplete }) {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="w-[760px] h-[800px] rounded-xl overflow-hidden relative shadow-2xl">
+      <div className="w-[760px] md:h-[800px] h-[650px] rounded-xl overflow-hidden relative shadow-2xl">
         {/* Loader while iframe loads */}
         {!isLoaded && (
           <div className="absolute inset-0 flex items-center justify-center ">
