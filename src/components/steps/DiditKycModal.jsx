@@ -1,11 +1,16 @@
 import { useState } from "react";
 
-export default function DiditKycModal({ url, onClose }) {
+export default function DiditKycModal({ url, onClose, onComplete }) {
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleClose = () => {
+    if (onComplete) onComplete(); // ✅ trigger completion callback
+    onClose(); // close modal normally
+  };
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className=" w-[760px] h-[800px] rounded-xl overflow-hidden relative shadow-2xl">
+      <div className="w-[760px] h-[800px] rounded-xl overflow-hidden relative shadow-2xl">
         {/* Loader while iframe loads */}
         {!isLoaded && (
           <div className="absolute inset-0 flex items-center justify-center ">
@@ -22,8 +27,8 @@ export default function DiditKycModal({ url, onClose }) {
 
         {/* Close button */}
         <button
-          onClick={onClose}
-          className="absolute top-2 right-3 text-gray-700 text-xl font-bold hover:text-red-500 transition"
+          onClick={handleClose}
+          className="absolute top-2 left-6 text-gray-200 text-3xl font-bold hover:text-red-500 transition"
         >
           ×
         </button>

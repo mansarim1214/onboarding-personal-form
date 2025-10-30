@@ -234,15 +234,22 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
       </div>
 
       {/* 🔹 KYC Modal */}
-      {showKycModal && (
-        <DiditKycModal
-          url={kycUrl}
-          onClose={() => {
-            setShowKycModal(false);
-            setIsVerifying(false);
-          }}
-        />
-      )}
+    {showKycModal && (
+  <DiditKycModal
+    url={kycUrl}
+    onClose={() => {
+      setShowKycModal(false);
+      setIsVerifying(false);
+    }}
+    onComplete={() => {
+      // ✅ Automatically go to next step when modal closes
+      console.log("KYC modal closed — proceeding to next step");
+      updateFormData(data);
+      nextStep();
+    }}
+  />
+)}
+
 
       {/* 🔸 Error / Info Modal */}
       {alertData.visible && (

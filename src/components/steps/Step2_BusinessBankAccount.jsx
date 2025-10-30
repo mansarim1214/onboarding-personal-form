@@ -77,12 +77,12 @@ export default function Step2_BusinessBankAccount({ nextStep, prevStep, updateFo
 
         {/* Buttons */}
         <div className="flex gap-2 mt-12">
-          {/* <button
+          <button
             onClick={prevStep}
             className="bg-[#2a2a33] hover:bg-[#32323c] text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
             Back
-          </button> */}
+          </button>
           <button
             onClick={handleNext}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
