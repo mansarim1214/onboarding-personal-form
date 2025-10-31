@@ -298,7 +298,7 @@ export default function Step7_BeneficiaryBankInformation({
 
           <div>
             <label className="block text-gray-300 mb-0.5">Beneficiary Name <span className="text-red-500">*</span></label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               placeholder="ABC Corporation Ltd. Or John Doe"
@@ -311,7 +311,7 @@ export default function Step7_BeneficiaryBankInformation({
 
           <div>
             <label className="block text-gray-300 mb-0.5">Beneficiary Address <span className="text-red-500">*</span></label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               placeholder="Beneficiary Address"

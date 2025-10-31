@@ -37,7 +37,7 @@ export default function Step2_BusinessBankAccount({ nextStep, prevStep, updateFo
         <p className="text-gray-400 mb-1">
           Help us understand how you intend to transact the OTC trade.
         </p>
-        <p className="text-red-500 font-medium mb-8">Required</p>
+        
 
         {/* Selection Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">

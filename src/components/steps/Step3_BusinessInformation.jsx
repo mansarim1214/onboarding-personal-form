@@ -86,7 +86,7 @@ export default function Step3_BusinessInformation({
             <label className="block text-gray-300 mb-0.5">
               Legal Entity Name <span className="text-red-500">*</span>
             </label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               name="legalEntityName"
@@ -98,7 +98,7 @@ export default function Step3_BusinessInformation({
           </div>
 
           <div>
-            <label className="block text-gray-300 mb-5">DBA / Trade Name</label>
+            <label className="block text-gray-300 mb-0.5">DBA / Trade Name</label>
             <input
               type="text"
               name="dbaName"
@@ -114,7 +114,7 @@ export default function Step3_BusinessInformation({
               Employer ID (EIN) / Tax Identification (TIN)
               <span className="text-red-500">*</span>
             </label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               name="ein"
@@ -130,7 +130,7 @@ export default function Step3_BusinessInformation({
               What jurisdiction(s) is the corporation a tax resident?
               <span className="text-red-500">*</span>
             </label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               name="whatJurisdiction"
@@ -146,7 +146,7 @@ export default function Step3_BusinessInformation({
             <label className="block text-gray-300 mb-0.5">
               Nature of Business <span className="text-red-500">*</span>
             </label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <textarea
               name="natureOfBusiness"
               placeholder="Describe what your business does and what product or service it provides.."
@@ -254,7 +254,7 @@ export default function Step3_BusinessInformation({
             <label className="block text-gray-300 mb-0.5">
               Business Address <span className="text-red-500">*</span>
             </label>
-            <p className="text-red-500 text-xs mb-1">Required</p>
+            
             <input
               type="text"
               name="businessAddress"
@@ -300,7 +300,7 @@ export default function Step3_BusinessInformation({
               <label className="block text-gray-300 mb-0.5">
                 {f.label} <span className="text-red-500">*</span>
               </label>
-              <p className="text-red-500 text-xs mb-1">Required</p>
+              
               <input
                 type={f.type || "text"}
                 name={f.name}
