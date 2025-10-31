@@ -79,8 +79,8 @@ export default function Step10_BusinessSupportingDocuments({
   };
 
   const renderUploadField = (label, field, required = false, optional = false) => (
-    <div className="flex flex-col sm:flex-row justify-between gap-6">
-      <div className="flex flex-col flex-col-reverse sm:flex-row items-center gap-3 w-56">
+    <div className="flex flex-col flex-col-reverse sm:flex-row justify-between gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-3 w-56">
         <button
           type="button"
           onClick={() => fileRefs[field].current.click()}
