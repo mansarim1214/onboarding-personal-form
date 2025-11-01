@@ -110,7 +110,7 @@ export default function Step9_BusinessDeclarations({
         <div className="space-y-10">
           {/* 1. Activity in high-risk country */}
           <div>
-            <div className="flex gap-4 items-start">
+            <div className="flex gap-4 items-start flex-col-reverse">
               {yesNoButton("activityInHighRiskCountry")}
               <div>
                 <p className="text-gray-300">
@@ -135,7 +135,7 @@ export default function Step9_BusinessDeclarations({
 
           {/* 2. Hedge Fund */}
           <div>
-            <div className="flex gap-4 items-start">
+            <div className="flex gap-4 items-start flex-col-reverse">
               {yesNoButton("operatesAsHedgeFund")}
               <p className="text-gray-300">
                 Does your company operate as a hedge fund, investment fund, or
@@ -147,7 +147,7 @@ export default function Step9_BusinessDeclarations({
 
           {/* 3. Financial Institution */}
           <div>
-            <div className="flex gap-4 items-start">
+            <div className="flex gap-4 items-start flex-col-reverse ">
               {yesNoButton("operatesAsFinancialInstitution")}
               <p className="text-gray-300">
                 Does your business operate as a financial institution, providing

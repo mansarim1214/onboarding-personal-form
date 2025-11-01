@@ -95,7 +95,7 @@ export default function Declarations({
         <div className="space-y-10">
           {/* Question 1 */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <div className="flex flex-col flex-col-reverse sm:flex-row sm:items-start gap-4">
               {yesNoButton("PersonFinancialSanctions")}
               <p className="text-gray-300">
                 Have you ever been subject to any local or international
@@ -111,7 +111,7 @@ export default function Declarations({
 
           {/* Question 2 */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <div className="flex flex-col flex-col-reverse sm:flex-row sm:items-start gap-4">
               {yesNoButton("PersonIsPEP")}
               <p className="text-gray-300">
                 Are you a politically exposed person (PEP)?{" "}
@@ -125,7 +125,7 @@ export default function Declarations({
 
           {/* Question 3 */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <div className="flex flex-col flex-col-reverse sm:flex-row sm:items-start gap-4">
               {yesNoButton("PersonChargedWithCrime")}
               <p className="text-gray-300">
                 Has the individual above ever been charged with the crime of

@@ -17,25 +17,34 @@ function formatNestedField(label, data, indent = 2) {
 
   if (Array.isArray(data)) {
     data.forEach((item, i) => {
-      formatted += `${spacing}- Item ${i + 1}:\n`;
+      formatted += `${spacing}- Account ${i + 1}:\n`;
       if (typeof item === "object" && item !== null) {
-        for (const key in item) {
-          formatted += `${spacing.repeat(2)}${key}: ${String(item[key])}\n`;
+        for (const [key, val] of Object.entries(item)) {
+          if (Array.isArray(val) || typeof val === "object") {
+            formatted += formatNestedField(`${spacing}${key}`, val, indent + 2);
+          } else {
+            formatted += `${spacing.repeat(2)}${key}: ${String(val || "")}\n`;
+          }
         }
       } else {
         formatted += `${spacing.repeat(2)}${String(item)}\n`;
       }
     });
   } else if (typeof data === "object" && data !== null) {
-    for (const key in data) {
-      formatted += `${spacing}${key}: ${String(data[key])}\n`;
+    for (const [key, val] of Object.entries(data)) {
+      if (Array.isArray(val) || typeof val === "object") {
+        formatted += formatNestedField(`${spacing}${key}`, val, indent + 2);
+      } else {
+        formatted += `${spacing}${key}: ${String(val || "")}\n`;
+      }
     }
   } else {
-    formatted += `${spacing}${String(data)}\n`;
+    formatted += `${spacing}${String(data || "")}\n`;
   }
 
   return formatted;
 }
+
 
 export const handler = async (event) => {
   const jsonHeaders = {
@@ -121,7 +130,8 @@ export const handler = async (event) => {
         <hr style="margin:20px 0;border:0;border-top:1px solid #ccc;">
         <p><em>This email was also sent to DoneOTC Admin for recordkeeping.</em></p>
       `
-      : `<pre>${textBody}</pre>`;
+      : `<pre style="font-family: monospace; white-space: pre-wrap;">${textBody}</pre>`;
+
 
     // 5️⃣ Send email
     await resend.emails.send({
