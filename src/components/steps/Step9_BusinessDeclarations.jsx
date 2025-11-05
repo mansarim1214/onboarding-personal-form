@@ -109,29 +109,28 @@ export default function Step9_BusinessDeclarations({
         {/* ================= QUESTIONS ================= */}
         <div className="space-y-10">
           {/* 1. Activity in high-risk country */}
-          <div>
-            <div className="flex gap-4 items-start flex-col-reverse">
-              {yesNoButton("activityInHighRiskCountry")}
-              <div>
-                <p className="text-gray-300">
-                  Do you conduct any activity in or have business partners whose
-                  residence or place of business is:{" "}
-                  <span className="text-red-500">*</span>
-                </p>
-                {data.activityInHighRiskCountry === "Yes" && (
-                  <p className="text-gray-300 mt-3 text-sm leading-relaxed">
-                    Afghanistan, Albania, Algeria, Bahamas, Bahrain, Bangladesh,
-                    Barbados, Belarus, Botswana, Burkina Faso, Cambodia, Crimea
-                    (unrecognized), DPRK, Donetsk, Ghana, Guyana, Iran, Iraq,
-                    Jamaica, Jordan, Lebanon, Libya, Mali, Mauritania, Mongolia,
-                    Morocco, Myanmar, Nicaragua, Niger, Pakistan, Palestine,
-                    Panama, Russia, Somalia, Sudan, Syria, Uganda, Yemen,
-                    Zimbabwe.
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
+          {/* 1. Activity in high-risk country */}
+<div>
+  <p className="text-gray-300 mb-3">
+    Do you conduct any activity in or have business partners whose residence or place of business is:
+    <span className="text-red-500">*</span>
+  </p>
+
+  {/* ✅ Always visible country list */}
+  <div className=" p-3 text-gray-300 text-sm leading-relaxed mb-4">
+    
+    <p>
+      Afghanistan, Albania, Algeria, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Botswana, Burkina Faso,
+      Cambodia, Crimea (unrecognized), DPRK, Donetsk, Ghana, Guyana, Iran, Iraq, Jamaica, Jordan, Lebanon,
+      Libya, Mali, Mauritania, Mongolia, Morocco, Myanmar, Nicaragua, Niger, Pakistan, Palestine, Panama,
+      Russia, Somalia, Sudan, Syria, Uganda, Yemen, Zimbabwe.
+    </p>
+  </div>
+
+  {/* ✅ Yes/No buttons stay below */}
+  {yesNoButton("activityInHighRiskCountry")}
+</div>
+
 
           {/* 2. Hedge Fund */}
           <div>

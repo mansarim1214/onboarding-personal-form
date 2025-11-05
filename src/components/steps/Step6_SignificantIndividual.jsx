@@ -22,9 +22,9 @@ export default function Step6_SignificantIndividual({
     SigniCountryOfBirth: "",
     SigniDateOfBirth: "",
     SigniOwnershipPercent: "",
-    SigniIsPEP: null,
-    chargedWithCrime: null,
-    financialSanctions: null,
+    SigniIsPEP: "",
+    chargedWithCrime: "",
+    financialSanctions: "",
     kycStatus: null, // ✅ Track KYC sending status
   };
 
@@ -99,10 +99,10 @@ export default function Step6_SignificantIndividual({
       if (!ind.SigniCountryOfBirth) missing.push("SigniCountryOfBirth");
       if (!ind.SigniDateOfBirth) missing.push("SigniDateOfBirth");
       if (!ind.SigniOwnershipPercent) missing.push("SigniOwnershipPercent");
-      if (ind.SigniIsPEP === null) missing.push("SigniIsPEP");
-      if (ind.chargedWithCrime === null) missing.push("chargedWithCrime");
-      if (ind.financialSanctions === null)
-        missing.push("financialSanctions");
+      if (!ind.SigniIsPEP) missing.push("SigniIsPEP");
+      if (!ind.chargedWithCrime) missing.push("chargedWithCrime");
+      if (!ind.financialSanctions) missing.push("financialSanctions");
+
       return missing;
     });
 
@@ -168,7 +168,6 @@ export default function Step6_SignificantIndividual({
         setIndividuals([...updatedIndividuals]);
       }
 
-     
       updateFormData({ significantIndividualsData: updatedIndividuals });
       nextStep();
     } catch (err) {
@@ -276,8 +275,16 @@ export default function Step6_SignificantIndividual({
                 { label: "Zip Code", field: "SigniZip" },
                 { label: "Country", field: "SigniCountry" },
                 { label: "Country of Birth", field: "SigniCountryOfBirth" },
-                { label: "Date of Birth", field: "SigniDateOfBirth", type: "date" },
-                { label: "Percent Ownership", field: "SigniOwnershipPercent", type: "number" },
+                {
+                  label: "Date of Birth",
+                  field: "SigniDateOfBirth",
+                  type: "date",
+                },
+                {
+                  label: "Percent Ownership",
+                  field: "SigniOwnershipPercent",
+                  type: "number",
+                },
               ].map((input, i) => (
                 <div key={i} className={input.col === 2 ? "md:col-span-2" : ""}>
                   <label className="block text-gray-300 mb-0.5">
@@ -331,9 +338,9 @@ export default function Step6_SignificantIndividual({
                   <div className="flex gap-4 mt-2">
                     <button
                       type="button"
-                      onClick={() => handleInput(idx, q.field, true)}
+                      onClick={() => handleInput(idx, q.field, "Yes")}
                       className={`px-6 py-2 rounded-lg border-2 font-medium transition-all duration-200 ${
-                        ind[q.field] === true
+                        ind[q.field] === "Yes"
                           ? "border-blue-500 bg-[#22222a] text-white"
                           : "bg-[#2a2a33] text-white hover:border-blue-500/60 hover:bg-[#24242c]"
                       }`}
@@ -342,9 +349,9 @@ export default function Step6_SignificantIndividual({
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleInput(idx, q.field, false)}
+                      onClick={() => handleInput(idx, q.field, "No")}
                       className={`px-6 py-2 rounded-lg border-2 font-medium transition-all duration-200 ${
-                        ind[q.field] === false
+                        ind[q.field] === "No"
                           ? "border-blue-500 bg-[#22222a] text-white"
                           : "bg-[#2a2a33] text-white hover:border-blue-500/60 hover:bg-[#24242c]"
                       }`}
