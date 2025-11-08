@@ -20,6 +20,7 @@ export default function DiditKycModal({ url, onClose, onComplete }) {
 
         <iframe
           src={url}
+          allow = "camera; microphone;fullscreen; autoplay;encrypted-media" 
           title="Didit Verification"
           className="w-full h-full border-0"
           onLoad={() => setIsLoaded(true)}
