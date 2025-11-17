@@ -12,11 +12,19 @@ export default function Step9_BusinessDeclarations({
     operatesAsFinancialInstitution: "",
     hasHighRiskClients: "",
 
-    statementMade: false,
-    shareholdersRegisterAttached: false,
-    organizationalChartAttached: false,
+    // Checkbox fields (18 in total)
+    noPriorFines: false,
+    cooperatedWithRequests: false,
+    noAdverseMedia: false,
+    noPublicComplaints: false,
+    updateWithin30Days: false,
+    provideKYBWithin14Days: false,
+    noPrivacyCoins: false,
+    acknowledgeDueDiligence: false,
+    authorizeVerification: false,
+    madeExaminations: false,
     chartAccurate: false,
-    registerContainsRecord: false,
+    registerAccurate: false,
     noBearerShares: false,
     obtainedConsents: false,
     notActingThirdParty: false,
@@ -27,43 +35,63 @@ export default function Step9_BusinessDeclarations({
 
   const [errors, setErrors] = useState({});
 
-  // ✅ Load data from formData once
   useEffect(() => {
     if (formData) {
       setData((prev) => ({ ...prev, ...formData }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ Handle Yes/No
   const handleSelect = (field, value) => {
     const newData = { ...data, [field]: value };
     setData(newData);
     updateFormData(newData);
-    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on change
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  // ✅ Handle checkboxes
   const handleCheckbox = (e) => {
     const newData = { ...data, [e.target.name]: e.target.checked };
     setData(newData);
     updateFormData(newData);
+    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   };
 
-  // ✅ Handle Next with validation
-  const handleNext = () => {
-    const requiredFields = [
-      "activityInHighRiskCountry",
-      "operatesAsHedgeFund",
-      "operatesAsFinancialInstitution",
-      "hasHighRiskClients",
-    ];
+  const requiredRadioFields = [
+    "activityInHighRiskCountry",
+    "operatesAsHedgeFund",
+    "operatesAsFinancialInstitution",
+    "hasHighRiskClients",
+  ];
 
+  const requiredCheckboxFields = [
+    "noPriorFines",
+    "cooperatedWithRequests",
+    "noAdverseMedia",
+    "noPublicComplaints",
+    "updateWithin30Days",
+    "provideKYBWithin14Days",
+    "noPrivacyCoins",
+    "acknowledgeDueDiligence",
+    "authorizeVerification",
+    "madeExaminations",
+    "chartAccurate",
+    "registerAccurate",
+    "noBearerShares",
+    "obtainedConsents",
+    "notActingThirdParty",
+    "acceptedTerms",
+    "acceptedPrivacy",
+    "authorizedOperation",
+  ];
+
+  const handleNext = () => {
     const newErrors = {};
-    requiredFields.forEach((field) => {
-      if (!data[field]) {
-        newErrors[field] = "This field is required.";
-      }
+
+    requiredRadioFields.forEach((field) => {
+      if (!data[field]) newErrors[field] = "This field is required.";
+    });
+
+    requiredCheckboxFields.forEach((field) => {
+      if (!data[field]) newErrors[field] = "This checkbox must be selected.";
     });
 
     if (Object.keys(newErrors).length > 0) {
@@ -75,7 +103,6 @@ export default function Step9_BusinessDeclarations({
     nextStep();
   };
 
-  // ✅ Yes/No Buttons with error display
   const yesNoButton = (field) => (
     <div className="flex flex-col gap-2">
       <div className="flex gap-4 mt-2">
@@ -99,6 +126,27 @@ export default function Step9_BusinessDeclarations({
     </div>
   );
 
+  const checkboxItems = [
+    { name: "noPriorFines", label: "The corporation has not been subject to any prior fines, warnings, suspensions, or sanctions listings." },
+    { name: "cooperatedWithRequests", label: "If any have been requested, the corporation has cooperated with prior exams or requests." },
+    { name: "noAdverseMedia", label: "To your best knowledge, you are not aware of adverse media related to your firm or principals." },
+    { name: "noPublicComplaints", label: "To your best knowledge, the corporation does not have any public complaints." },
+    { name: "updateWithin30Days", label: "The corporation will provide updates within 30 days of any change in structure, ownership, or directors." },
+    { name: "provideKYBWithin14Days", label: "If requested, the corporation and its key individuals will provide KYB/KYC updates within 14 days." },
+    { name: "noPrivacyCoins", label: "The corporation’s crypto wallets will not transact with any privacy coins or mixers." },
+    { name: "acknowledgeDueDiligence", label: "I acknowledge that Done.com Inc and partner banks may conduct compliance and security checks under required laws." },
+    { name: "authorizeVerification", label: "I authorize Done.com Inc and partner banks to verify information and share details with third parties when required by law." },
+    { name: "madeExaminations", label: "I have made any examinations needed to confirm the statements in this certificate." },
+    { name: "chartAccurate", label: "The organizational chart reflects true, complete, and current ownership and control details." },
+    { name: "registerAccurate", label: "The shareholders' register contains a true, complete, and current record of all registered holders." },
+    { name: "noBearerShares", label: "The corporation does not issue bearer shares." },
+    { name: "obtainedConsents", label: "All required consents for personal information included in this form have been obtained." },
+    { name: "notActingThirdParty", label: "The corporation is not acting on behalf of a third party in dealings with Done.com Inc." },
+    { name: "acceptedTerms", label: "I have read and accept the Terms and Conditions." },
+    { name: "acceptedPrivacy", label: "I have read and accept the Privacy Policy." },
+    { name: "authorizedOperation", label: "I am authorized to open and operate accounts, execute agreements, and act on behalf of the corporation." },
+  ];
+
   return (
     <div className="min-h-screen flex items-center">
       <div className="w-full max-w-6xl rounded-2xl p-10 shadow-2xl">
@@ -106,152 +154,80 @@ export default function Step9_BusinessDeclarations({
           Business Declarations
         </h1>
 
-        {/* ================= QUESTIONS ================= */}
+        {/* RADIO QUESTIONS */}
         <div className="space-y-10">
-          {/* 1. Activity in high-risk country */}
-          {/* 1. Activity in high-risk country */}
-<div>
-  <p className="text-gray-300 mb-3">
-    Do you conduct any activity in or have business partners whose residence or place of business is:
-    <span className="text-red-500">*</span>
-  </p>
 
-  {/* ✅ Always visible country list */}
-  <div className=" p-3 text-gray-300 text-sm leading-relaxed mb-4">
-    
-    <p>
-      Afghanistan, Albania, Algeria, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Botswana, Burkina Faso,
-      Cambodia, Crimea (unrecognized), DPRK, Donetsk, Ghana, Guyana, Iran, Iraq, Jamaica, Jordan, Lebanon,
-      Libya, Mali, Mauritania, Mongolia, Morocco, Myanmar, Nicaragua, Niger, Pakistan, Palestine, Panama,
-      Russia, Somalia, Sudan, Syria, Uganda, Yemen, Zimbabwe.
-    </p>
-  </div>
+          <div>
+            <p className="text-gray-300 mb-3">
+              Do you conduct any activity in or have business partners in the following countries:
+              <span className="text-red-500">*</span>
+            </p>
 
-  {/* ✅ Yes/No buttons stay below */}
-  {yesNoButton("activityInHighRiskCountry")}
-</div>
+            <div className="p-3 text-gray-300 text-sm leading-relaxed mb-4">
+              Afghanistan, Albania, Algeria, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Botswana,
+              Burkina Faso, Cambodia, Crimea, DPRK, Donetsk, Ghana, Guyana, Iran, Iraq, Jamaica, Jordan,
+              Lebanon, Libya, Mali, Mauritania, Mongolia, Morocco, Myanmar, Nicaragua, Niger, Pakistan,
+              Palestine, Panama, Russia, Somalia, Sudan, Syria, Uganda, Yemen, Zimbabwe.
+            </div>
 
+            {yesNoButton("activityInHighRiskCountry")}
+          </div>
 
-          {/* 2. Hedge Fund */}
           <div>
             <div className="flex gap-4 items-start flex-col-reverse">
               {yesNoButton("operatesAsHedgeFund")}
               <p className="text-gray-300">
-                Does your company operate as a hedge fund, investment fund, or
-                any other entity involved in a fund structure?{" "}
-                <span className="text-red-500">*</span>
+                Does your company operate as a hedge fund or investment entity? <span className="text-red-500">*</span>
               </p>
             </div>
           </div>
 
-          {/* 3. Financial Institution */}
           <div>
             <div className="flex gap-4 items-start flex-col-reverse ">
               {yesNoButton("operatesAsFinancialInstitution")}
               <p className="text-gray-300">
-                Does your business operate as a financial institution, providing
-                services such as money transmission, lending, or brokerage?{" "}
+                Does your business operate as a financial institution, dealing with money transmission, lending, or brokerage?
                 <span className="text-red-500">*</span>
               </p>
             </div>
           </div>
 
-          
-          {/* 4. High-Risk Clients */}
           <div>
             <div className="flex items-start gap-4">
               {yesNoButton("hasHighRiskClients")}
               <p className="text-gray-300">
-                Does the corporation engage in, or have any of the following as
-                clients: <span className="text-red-500">*</span>
+                Does the corporation serve any high-risk client categories? <span className="text-red-500">*</span>
               </p>
             </div>
 
-            {/* Always visible descriptive list */}
             <div className="mt-5 ml-8">
-              <p className="text-gray-300 mb-3">
-                Examples of high-risk client activities include:
-              </p>
+              <p className="text-gray-300 mb-3">Examples of high-risk activities:</p>
               <ul className="list-disc list-inside text-gray-400 space-y-1 text-sm">
-                <li>Accepting assets suspected to be criminal proceeds</li>
-                <li>
-                  Business with known or suspected terrorist/criminal
-                  organizations
-                </li>
-                <li>Maintaining anonymous or shell bank accounts</li>
-                <li>Accepting assets from individuals below age 18</li>
-                <li>
-                  Accepting assets from individuals above 65 with low income
-                </li>
-                <li>Binary Options</li>
-                <li>Banknote sales</li>
+                <li>Assets tied to suspected criminal sources</li>
+                <li>Dealings with terrorist or criminal groups</li>
+                <li>Anonymous or shell accounts</li>
+                <li>Assets from minors</li>
+                <li>Assets from seniors with low income</li>
+                <li>Binary options</li>
+                <li>Banknote trades</li>
                 <li>Virtual mixers</li>
                 <li>PEPs</li>
-                <li>Marijuana or drug-related activities</li>
-                <li>Shell Banks</li>
-                <li>Correspondent Banks</li>
-                <li>Arms/Defense</li>
-                <li>Pirated audio/video content</li>
-                <li>Adult Entertainment</li>
-                <li>Counterfeit goods</li>
+                <li>Drug-related activity</li>
+                <li>Shell banks</li>
+                <li>Correspondent banks</li>
+                <li>Arms or defense activity</li>
+                <li>Pirated media</li>
+                <li>Adult content industry</li>
+                <li>Counterfeit products</li>
                 <li>Pyramid schemes</li>
               </ul>
             </div>
           </div>
         </div>
 
-        {/* ================= CHECKBOX AGREEMENTS ================= */}
+        {/* CHECKBOX SECTION */}
         <div className="mt-10 space-y-5 text-gray-300">
-          {[
-            {
-              name: "statementMade",
-              label:
-                "I have made or caused to be made such examinations or investigations as necessary to make the statements contained in this certificate.",
-            },
-            {
-              name: "shareholdersRegisterAttached",
-              label:
-                "Attached are true, complete, and accurate copies of the shareholders' register and organizational chart of the Corporation.",
-            },
-            {
-              name: "chartAccurate",
-              label:
-                "The Organizational Chart sets out true, complete, and current information on ownership and control.",
-            },
-            {
-              name: "registerContainsRecord",
-              label:
-                "The Shareholders' Register contains a true and complete record of all holders of securities and warrants issued by the Corporation.",
-            },
-            {
-              name: "noBearerShares",
-              label:
-                "The Corporation does not issue bearer shares. Relevant registers of threshold entities are also attached.",
-            },
-            {
-              name: "obtainedConsents",
-              label:
-                "All necessary consents have been obtained to allow Done.com Inc. to collect and use personal information per its Privacy Policy.",
-            },
-            {
-              name: "notActingThirdParty",
-              label:
-                "The Corporation is not acting on behalf of a third party in its dealings with Done.com Inc.",
-            },
-            {
-              name: "acceptedTerms",
-              label: "I have read and accept the Terms and Conditions.",
-            },
-            {
-              name: "acceptedPrivacy",
-              label: "I have read and accept the Privacy Policy.",
-            },
-            {
-              name: "authorizedOperation",
-              label:
-                "I am authorized to open and operate accounts, execute agreements, and act on behalf of the Company.",
-            },
-          ].map((item, idx) => (
+          {checkboxItems.map((item, idx) => (
             <label key={idx} className="flex items-start gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -261,11 +237,14 @@ export default function Step9_BusinessDeclarations({
                 className="mt-1 accent-blue-600 w-5 h-5"
               />
               <span className="text-gray-300 leading-snug">{item.label}</span>
+              {errors[item.name] && (
+                <p className="text-red-500 text-xs mt-1 ml-2">{errors[item.name]}</p>
+              )}
             </label>
           ))}
         </div>
 
-        {/* ================= BUTTONS ================= */}
+        {/* BUTTONS */}
         <div className="flex gap-2 mt-12">
           <button
             onClick={prevStep}

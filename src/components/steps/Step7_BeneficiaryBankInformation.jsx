@@ -210,7 +210,7 @@ export default function Step7_BeneficiaryBankInformation({
     if (!bankCity.trim()) e.bankCity = "Bank city is required.";
     // bankState is optional in original UI; keep as required? original had it optional — treat optional
     // if you want to require, uncomment:
-    // if (!bankState.trim()) e.bankState = "Bank state is required.";
+    if (!bankState.trim()) e.bankState = "Bank state is required.";
     if (!bankCountry.trim()) e.bankCountry = "Bank country is required.";
     if (!bankZip.trim()) e.bankZip = "Bank postal code is required.";
     if (!swiftCode.trim()) e.swiftCode = "SWIFT/BIC code is required.";
@@ -343,7 +343,7 @@ export default function Step7_BeneficiaryBankInformation({
                 onChange={(e) => setBeneficiaryState(e.target.value)}
                 className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2"
               />
-              {renderError("beneficiaryState")}
+              {renderError("bankState")}
             </div>
             <div>
               <label className="block text-gray-300 mb-0.5">Country <span className="text-red-500">*</span></label>
@@ -414,7 +414,7 @@ export default function Step7_BeneficiaryBankInformation({
 
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-gray-300 mb-0.5">State / Province</label>
+              <label className="block text-gray-300 mb-0.5">State / Province <span className="text-red-500">*</span></label> 
               <input
                 type="text"
                 placeholder="State or Province"
@@ -422,7 +422,7 @@ export default function Step7_BeneficiaryBankInformation({
                 onChange={(e) => setBankState(e.target.value)}
                 className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2"
               />
-              {/* state optional */}
+             {renderError("beneficiaryState")}
             </div>
             <div>
               <label className="block text-gray-300 mb-0.5">Country <span className="text-red-500">*</span></label>
