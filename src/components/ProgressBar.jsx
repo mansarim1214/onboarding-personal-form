@@ -1,17 +1,16 @@
 export default function ProgressBar({ currentStep = 1, activeSteps = [], totalSteps = 0, accountType }) {
+
+
   const stepTitles = {
     1: "Contact Details",
-    2: "Transaction Type",
-    3: accountType === "Personal" ? "Employment" : "Business Information",
-    4: "Business Structure",
-    5: "Business Structure Cont.",
-    6: "Significant Individual",
-    8: "Beneficiary Bank Information",
-    9: "Wallet Information",
-    10: "Business Supporting Document",
-    11: "Business Declarations",
-    12: "Personal Declarations",
-    13: "Enhanced Due Diligence",
+  
+    2: "Employment",
+   
+   3: "Beneficiary Bank Information",
+    4: "Wallet Information",
+   
+    5: "Personal Declarations",
+   
   };
 
   const visibleSteps = activeSteps.map((id) => ({

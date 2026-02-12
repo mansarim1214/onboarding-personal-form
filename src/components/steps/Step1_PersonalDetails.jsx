@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import DiditKycModal from "./DiditKycModal";
 
 export default function Step1_PersonalDetails({ nextStep, updateFormData, formData }) {
   const [data, setData] = useState({
@@ -18,8 +17,6 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
 
   const [errors, setErrors] = useState({});
   const [isVerifying, setIsVerifying] = useState(false);
-  const [kycUrl, setKycUrl] = useState(null);
-  const [showKycModal, setShowKycModal] = useState(false);
 
   // 🔹 Local alert modal state
   const [alertData, setAlertData] = useState({
@@ -78,56 +75,9 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
       return;
     }
 
-    try {
-      setIsVerifying(true);
-
-      // 1️⃣ Create Didit session
-      const res = await fetch("/api/start-kyc", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: `${data.firstName} ${data.lastName}`,
-          email: data.email,
-          type: "main",
-        }),
-      });
-
-      const result = await res.json();
-      if (!result.url) {
-        setIsVerifying(false);
-        showAlert("KYC Error", "Failed to start KYC session. Please try again later.", "error");
-        return;
-      }
-
-      // 2️⃣ Show Didit modal
-      setKycUrl(result.url);
-      setShowKycModal(true);
-
-      // 3️⃣ Poll backend for approval
-      const interval = setInterval(async () => {
-        try {
-          const check = await fetch(
-            `/api/kyc-status/${encodeURIComponent(data.email)}`
-          );
-          const status = await check.json();
-
-          if (status?.status === "Approved" || status?.decision === "verified") {
-            clearInterval(interval);
-            setShowKycModal(false);
-            setIsVerifying(false);
-            showAlert("✅ Verification Complete", "Your KYC verification was approved successfully!", "success");
-            updateFormData(data);
-            nextStep();
-          }
-        } catch (err) {
-          console.warn("Polling error:", err);
-        }
-      }, 5000);
-    } catch (err) {
-      console.error("KYC error:", err);
-      setIsVerifying(false);
-      showAlert("Unexpected Error", "Something went wrong while setting up KYC.", "error");
-    }
+    // No KYC logic now, just go to the next step directly
+    updateFormData(data);
+    nextStep();
   };
 
   const renderInput = (field) => (
@@ -224,32 +174,11 @@ export default function Step1_PersonalDetails({ nextStep, updateFormData, formDa
               isVerifying ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
             } text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200`}
           >
-            {isVerifying ? "Verifying..." : "Next"}
+            Next
           </button>
         </div>
 
-
-
-        
       </div>
-
-      {/* 🔹 KYC Modal */}
-    {showKycModal && (
-  <DiditKycModal
-    url={kycUrl}
-    onClose={() => {
-      setShowKycModal(false);
-      setIsVerifying(false);
-    }}
-    onComplete={() => {
-      // ✅ Automatically go to next step when modal closes
-      console.log("KYC modal closed — proceeding to next step");
-      updateFormData(data);
-      nextStep();
-    }}
-  />
-)}
-
 
       {/* 🔸 Error / Info Modal */}
       {alertData.visible && (

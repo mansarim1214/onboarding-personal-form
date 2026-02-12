@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import SOF_Modal from "./SOF_Modal";
 
 export default function Employment({
   nextStep,
@@ -11,12 +12,21 @@ export default function Employment({
   const [selectedSources, setSelectedSources] = useState([]);
   const [sourceOtherText, setSourceOtherText] = useState("");
 
-  // error states
+  // State to control visibility of the modal
+  const [showModal, setShowModal] = useState(true);
+
+  // State for Source of Funds (SOF) and Source of Wealth (SOW)
+  const [sourceOfFunds, setSourceOfFunds] = useState("");
+  const [sourceOfWealth, setSourceOfWealth] = useState("");
+
+  // Error states
   const [errors, setErrors] = useState({
     industries: "",
     industryOther: "",
     sources: "",
     sourceOther: "",
+    sourceOfFunds: "",
+    sourceOfWealth: "",
   });
 
   const mounted = useRef(false);
@@ -89,11 +99,30 @@ export default function Employment({
     "Other",
   ];
 
+  // SOF and SOW options
+  const sourceOfFundsOptions = [
+    "Salary",
+    "Investment Income",
+    "Business Revenue",
+    "Loan",
+    "Other",
+  ];
+
+  const sourceOfWealthOptions = [
+    "Business Ownership",
+    "Investment Returns",
+    "Inheritance",
+    "Real Estate",
+    "Other",
+  ];
+
   useEffect(() => {
     setSelectedIndustries(formData.selectedIndustries || []);
     setIndustryOtherText(formData.industryOtherText || "");
     setSelectedSources(formData.selectedSources || []);
     setSourceOtherText(formData.sourceOtherText || "");
+    setSourceOfFunds(formData.sourceOfFunds || "");
+    setSourceOfWealth(formData.sourceOfWealth || "");
   }, []);
 
   useEffect(() => {
@@ -103,11 +132,20 @@ export default function Employment({
         industryOtherText,
         selectedSources,
         sourceOtherText,
+        sourceOfFunds,
+        sourceOfWealth,
       });
     } else {
       mounted.current = true;
     }
-  }, [selectedIndustries, industryOtherText, selectedSources, sourceOtherText]);
+  }, [
+    selectedIndustries,
+    industryOtherText,
+    selectedSources,
+    sourceOtherText,
+    sourceOfFunds,
+    sourceOfWealth,
+  ]);
 
   const handleNext = () => {
     let newErrors = {
@@ -115,6 +153,8 @@ export default function Employment({
       industryOther: "",
       sources: "",
       sourceOther: "",
+      sourceOfFunds: "",
+      sourceOfWealth: "",
     };
     let hasError = false;
 
@@ -138,31 +178,30 @@ export default function Employment({
       hasError = true;
     }
 
+    // Validate SOF and SOW dropdowns
+    if (!sourceOfFunds) {
+      newErrors.sourceOfFunds = "Please select a source of funds.";
+      hasError = true;
+    }
+
+    if (!sourceOfWealth) {
+      newErrors.sourceOfWealth = "Please select a source of wealth.";
+      hasError = true;
+    }
+
     setErrors(newErrors);
 
     if (!hasError) nextStep();
   };
 
-  const toggleIndustry = (industry) => {
-    setSelectedIndustries((prev) =>
-      prev.includes(industry)
-        ? prev.filter((i) => i !== industry)
-        : [...prev, industry]
-    );
-    setErrors((prev) => ({ ...prev, industries: "", industryOther: "" }));
-  };
-
-  const toggleSource = (source) => {
-    setSelectedSources((prev) =>
-      prev.includes(source)
-        ? prev.filter((s) => s !== source)
-        : [...prev, source]
-    );
-    setErrors((prev) => ({ ...prev, sources: "", sourceOther: "" }));
-  };
-
   return (
     <div className="min-h-screen flex items-center">
+      {/* Show the Modal when the user reaches the Employment step */}
+      <SOF_Modal
+        showModal={showModal}
+        handleClose={() => setShowModal(false)}
+      />
+
       <div className="w-full max-w-6xl p-10 shadow-2xl">
         <h1 className="text-4xl font-semibold text-center text-white mb-2">
           Employment
@@ -216,71 +255,70 @@ export default function Employment({
           )}
         </div>
 
-        {/* SOURCE OF FUNDS */}
-        <div className="mt-10">
-          <label className="block text-gray-300 mb-0.5">
-            Please select the type of industry that you work in. (Check all that
-            apply.) <span className="text-red-500">*</span>
-          </label>
-          {errors.sources && (
-            <p className="text-red-500 text-sm mb-2">{errors.sources}</p>
-          )}
+        {/* SOURCE OF FUNDS (SOF) Dropdown */}
+       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+  {/* Source of Funds (SOF) Dropdown */}
+  <div>
+    <label className="block text-gray-300 mb-0.5">
+      Source of Funds (SOF) <span className="text-red-500">*</span>
+    </label>
+    {errors.sourceOfFunds && (
+      <p className="text-red-500 text-sm mb-2">{errors.sourceOfFunds}</p>
+    )}
+    <select
+      value={sourceOfFunds}
+      onChange={(e) => setSourceOfFunds(e.target.value)}
+      className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      aria-label="Source of Funds"
+    >
+      <option value="">Please choose a source of funds</option>
+      {sourceOfFundsOptions.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {yourIndustry.map((src) => (
-              <button
-                key={src}
-                onClick={() => toggleSource(src)}
-                className={`w-full px-5 py-3 rounded-lg text-white text-sm text-left border-2 transition-all duration-200 ${
-                  selectedSources.includes(src)
-                    ? "border-blue-500 bg-[#22222a]"
-                    : "bg-[#2a2a33] border-transparent hover:border-blue-500/60 hover:bg-[#24242c]"
-                }`}
-              >
-                {src}
-              </button>
-            ))}
-          </div>
+  {/* Source of Wealth (SOW) Dropdown */}
+  <div>
+    <label className="block text-gray-300 mb-0.5">
+      Source of Wealth (SOW) <span className="text-red-500">*</span>
+    </label>
+    {errors.sourceOfWealth && (
+      <p className="text-red-500 text-sm mb-2">{errors.sourceOfWealth}</p>
+    )}
+    <select
+      value={sourceOfWealth}
+      onChange={(e) => setSourceOfWealth(e.target.value)}
+      className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      aria-label="Source of Wealth"
+    >
+      <option value="">Please choose a source of wealth</option>
+      {sourceOfWealthOptions.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
-          {selectedSources.includes("Other") && (
-            <div className="mt-6">
-              <label className="block text-gray-300 mb-0.5">
-                If 'Other' is selected, please specify below{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Specify source..."
-                value={sourceOtherText}
-                onChange={(e) => setSourceOtherText(e.target.value)}
-                className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.sourceOther && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.sourceOther}
-                </p>
-              )}
-            </div>
-          )}
-        </div>
 
         {/* BUTTONS */}
         <div className="flex gap-2 mt-12">
-          {" "}
           <button
             onClick={prevStep}
             className="bg-[#2a2a33] hover:bg-[#32323c] text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
-            {" "}
-            Back{" "}
-          </button>{" "}
+            Back
+          </button>
           <button
             onClick={handleNext}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
-            {" "}
-            Next{" "}
-          </button>{" "}
+            Next
+          </button>
         </div>
       </div>
     </div>

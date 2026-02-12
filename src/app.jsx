@@ -21,15 +21,13 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState("");
 
 
-useEffect(() => {
-  if (formData.accountType === "Business" && step === 3) {
-    setStep(3); // resets to correct Business step (Business Information)
-  }
-  if (formData.accountType === "Personal" && step > 6) {
-    // optional: handle switching from business → personal
-    setStep(1);
-  }
-}, [formData.accountType]);
+// useEffect(() => {
+
+//   if (step > 6) {
+//     // optional: handle switching from business → personal
+//     setStep(1);
+//   }
+// }, [formData.accountType]);
 
 
   const triggerIndustries = [
@@ -76,53 +74,40 @@ useEffect(() => {
   };
 
   // ✅ Consistent step mapping
-  const getActiveSteps = (data) => {
-    const isPersonal = data.accountType === "Personal";
-    const showEDD = shouldShowEDD(data);
-
-    if (isPersonal) {
-      return [
-        1, // Contact Details
-        2, // Transaction Type
-        3, // Employment
-        8, // Beneficiary Bank Information
-        9, // Wallet Information
-        12, // Personal Declarations
-        ...(showEDD ? [13] : []), // Enhanced Due Diligence
-      ];
-    }
-
-    // Business flow
-    return [
-      1, // Contact Details
-      2, // Transaction Type
-      3, // Business Information
-      4, // Business Structure
-      5, // Business Structure Cont.
-      6, // Significant Individual
-      8, // Beneficiary Bank Information
-      9, // Wallet Information
-      10, // Business Supporting Document
-      11, // Business Declarations
-      ...(showEDD ? [13] : []),
-    ];
-  };
+ const getActiveSteps = (data) => {
+  // Only return personal steps, skip business-related ones and skip Step 2
+  return [
+    1, // Contact Details (Step 1)
+    2, // Employment (Step 3, skipping Step 2)
+    3, // Beneficiary Bank Information
+    4, // Wallet Information
+    5, // Personal Declarations
+    ...(shouldShowEDD(data) ? [13] : []), // Enhanced Due Diligence (if applicable)
+  ];
+};
 
   const nextStep = (latestData = {}) => {
-    const merged = { ...formData, ...latestData };
-    setFormData(merged);
+  const merged = { ...formData, ...latestData };
+  setFormData(merged);
 
-    const activeSteps = getActiveSteps(merged);
-    const currentIndex = activeSteps.indexOf(step);
+  const activeSteps = getActiveSteps(merged);
+  const currentIndex = activeSteps.indexOf(step);
 
-    if (currentIndex === -1) return;
-    if (currentIndex === activeSteps.length - 1) {
-      submitForm(merged);
-      return;
-    }
+  if (currentIndex === -1) return;
+  if (currentIndex === activeSteps.length - 1) {
+    submitForm(merged);
+    return;
+  }
 
-    setStep(activeSteps[currentIndex + 1]);
-  };
+  // Skip Step 2 and move directly from Step 1 to Step 3
+  // if (step === 1) {
+  //   setStep(3);
+  //   return;
+  // }
+
+  setStep(activeSteps[currentIndex + 1]);
+};
+
 
   const prevStep = () => {
     const activeSteps = getActiveSteps(formData);
@@ -174,155 +159,76 @@ useEffect(() => {
   const totalSteps = activeSteps.length;
   const isLastStep = step === activeSteps[activeSteps.length - 1];
 
-  return (
-    <div className="flex justify-center bg-[#0c0c0f] min-h-screen">
-      <div className="flex w-full bg-[#1a1a22]/80 rounded-2xl shadow-2xl border border-[#2a2a33]">
-        <div className="flex-1">
-          {/* Step 1 */}
-          {step === 1 && (
-            <Step1_PersonalDetails
-              nextStep={nextStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
+return (
+  <div className="flex justify-center bg-[#0c0c0f] min-h-screen">
+    <div className="flex w-full bg-[#1a1a22]/80 rounded-2xl shadow-2xl border border-[#2a2a33]">
+      <div className="flex-1">
+        {/* Step 1 */}
+        {step === 1 && (
+          <Step1_PersonalDetails
+            nextStep={nextStep}
+            updateFormData={updateFormData}
+            formData={formData}
+          />
+        )}
 
-          {/* Step 2 */}
-          {step === 2 && (
-            <Step2_BusinessBankAccount
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
+        {/* Step 3 (Skip Step 2 and go directly here) */}
+        {step === 2 && (
+          <Employment
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateFormData={updateFormData}
+            formData={formData}
+          />
+        )}
 
-          {/* Step 3 - Conditional */}
-          {isPersonal && step === 3 &&  (
-            <Employment
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
+        {/* Step 8 */}
+        {step === 3 && (
+          <Step7_BeneficiaryBankInformation
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateFormData={updateFormData}
+            formData={formData}
+          />
+        )}
 
-          {!isPersonal && step === 3 &&  (
-            <Step3_BusinessInformation
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
+        {/* Step 9 */}
+        {step === 4 && (
+          <Step8_WalletInformation
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateFormData={updateFormData}
+            formData={formData}
+          />
+        )}
 
-          {/* Business only */}
-          {!isPersonal && step === 4 && (
-            <Step4_BusinessStructure
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
+        {/* Personal Declarations */}
+        {step === 5 &&(
+          <Declarations
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateFormData={updateFormData}
+            formData={formData}
+            isLastStep={isLastStep}
+            submitForm={submitForm}
+          />
+        )}
 
-          {!isPersonal && step === 5 && (
-            <Step5_BusinessStructureCont
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
-
-          {!isPersonal && step === 6 && (
-            <Step6_SignificantIndividual
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
-
-          {/* Step 8 */}
-          {step === 8 && (
-            <Step7_BeneficiaryBankInformation
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
-
-          {/* Step 9 */}
-          {step === 9 && (
-            <Step8_WalletInformation
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
-
-          {/* Business Declarations */}
-          {!isPersonal && step === 11 && (
-            <Step9_BusinessDeclarations
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-            />
-          )}
-
-          {!isPersonal && step === 10 && (
-            <Step10_BusinessSupportingDocuments
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-              isLastStep={isLastStep}
-              submitForm={submitForm}
-            />
-          )}
-
-          {/* Personal Declarations */}
-          {isPersonal && step === 12 && (
-            <Declarations
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-              isLastStep={isLastStep}
-              submitForm={submitForm}
-            />
-          )}
-
-          {/* EDD */}
-          {showEDD && step === 13 && (
-            <Step11_EnhancedDueDiligence
-              nextStep={nextStep}
-              prevStep={prevStep}
-              updateFormData={updateFormData}
-              formData={formData}
-              isLastStep={isLastStep}
-              submitForm={submitForm}
-            />
-          )}
-
-          {errorMessage && (
-            <p className="text-red-500 mt-3 text-sm">{errorMessage}</p>
-          )}
-        </div>
-
-        {/* ✅ Sidebar Progress */}
-      <ProgressBar
-  currentStep={step}
-  activeSteps={activeSteps}
-  totalSteps={totalSteps}
-  accountType={formData.accountType}
-/>
-
+       
+        {errorMessage && (
+          <p className="text-red-500 mt-3 text-sm">{errorMessage}</p>
+        )}
       </div>
+
+      {/* ✅ Sidebar Progress */}
+      <ProgressBar
+        currentStep={step}
+        activeSteps={activeSteps}
+        totalSteps={totalSteps}
+        accountType={formData.accountType}
+      />
     </div>
-  );
+  </div>
+);
+
 }

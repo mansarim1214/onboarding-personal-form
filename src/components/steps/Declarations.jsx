@@ -11,12 +11,16 @@ export default function Declarations({
     PersonFinancialSanctions: "",
     PersonIsPEP: "",
     PersonChargedWithCrime: "",
+    SOFFile: null, // State for Source of Funds file
+    SOWFile: null, // State for Source of Wealth file
   });
 
   const [errors, setErrors] = useState({
     PersonFinancialSanctions: "",
     PersonIsPEP: "",
     PersonChargedWithCrime: "",
+    SOFFile: "",
+    SOWFile: "",
   });
 
   // Load saved data if exists
@@ -32,6 +36,15 @@ export default function Declarations({
     setData(newData);
     updateFormData(newData);
     setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on select
+  };
+
+  // Handle file upload
+  const handleFileUpload = (field, e) => {
+    const file = e.target.files[0];
+    const newData = { ...data, [field]: file };
+    setData(newData);
+    updateFormData(newData);
+    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on file upload
   };
 
   // Reusable Yes/No buttons
@@ -58,6 +71,8 @@ export default function Declarations({
       PersonFinancialSanctions: "",
       PersonIsPEP: "",
       PersonChargedWithCrime: "",
+      SOFFile: "",
+      SOWFile: "",
     };
     let hasError = false;
 
@@ -74,6 +89,15 @@ export default function Declarations({
     if (!data.PersonChargedWithCrime) {
       newErrors.PersonChargedWithCrime =
         "Please select Yes or No for this question.";
+      hasError = true;
+    }
+    // Validate file upload
+    if (!data.SOFFile) {
+      newErrors.SOFFile = "Please upload a file for Source of Funds.";
+      hasError = true;
+    }
+    if (!data.SOWFile) {
+      newErrors.SOWFile = "Please upload a file for Source of Wealth.";
       hasError = true;
     }
 
@@ -139,25 +163,55 @@ export default function Declarations({
               </p>
             )}
           </div>
+
+          {/* File Upload Section (at the end) */}
+          <div className="mt-10 space-y-6">
+            {/* SOF File Upload */}
+            <div>
+              <label className="block text-gray-300 mb-0.5">
+                Upload Source of Funds (SOF) File <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                onChange={(e) => handleFileUpload("SOFFile", e)}
+                className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.SOFFile && (
+                <p className="text-red-500 text-sm mt-1">{errors.SOFFile}</p>
+              )}
+            </div>
+
+            {/* SOW File Upload */}
+            <div>
+              <label className="block text-gray-300 mb-0.5">
+                Upload Source of Wealth (SOW) File <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                onChange={(e) => handleFileUpload("SOWFile", e)}
+                className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.SOWFile && (
+                <p className="text-red-500 text-sm mt-1">{errors.SOWFile}</p>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Navigation */}
         <div className="flex gap-2 mt-12">
-          {" "}
           <button
             onClick={prevStep}
             className="bg-[#2a2a33] hover:bg-[#32323c] text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
-            {" "}
-            Back{" "}
-          </button>{" "}
+            Back
+          </button>
           <button
             onClick={handleNext}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-200"
           >
-            {" "}
-            {isLastStep ? "Submit" : "Next"}{" "}
-          </button>{" "}
+            {isLastStep ? "Submit" : "Next"}
+          </button>
         </div>
       </div>
     </div>
