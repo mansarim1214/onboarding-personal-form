@@ -31,7 +31,7 @@ export default function Employment({
 
   const mounted = useRef(false);
 
-  const companyIndustry = [
+ const companyIndustry = [
     "Accountant",
     "Agent a federal or local government",
     "Agriculture, Forestry & Fishing",
@@ -115,6 +115,24 @@ export default function Employment({
     "Real Estate",
     "Other",
   ];
+
+  const toggleIndustry = (industry) => {
+    setSelectedIndustries((prev) =>
+      prev.includes(industry)
+        ? prev.filter((i) => i !== industry)
+        : [...prev, industry]
+    );
+    setErrors((prev) => ({ ...prev, industries: "", industryOther: "" }));
+  };
+
+    const toggleSource = (source) => {
+    setSelectedSources((prev) =>
+      prev.includes(source)
+        ? prev.filter((s) => s !== source)
+        : [...prev, source]
+    );
+    setErrors((prev) => ({ ...prev, sources: "", sourceOther: "" }));
+  };
 
   useEffect(() => {
     setSelectedIndustries(formData.selectedIndustries || []);
@@ -249,6 +267,54 @@ export default function Employment({
               {errors.industryOther && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.industryOther}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+         {/* SOURCE OF FUNDS */}
+        <div className="mt-10">
+          <label className="block text-gray-300 mb-0.5">
+            Please select the type of industry that you work in. (Check all that
+            apply.) <span className="text-red-500">*</span>
+          </label>
+          {errors.sources && (
+            <p className="text-red-500 text-sm mb-2">{errors.sources}</p>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {yourIndustry.map((src) => (
+              <button
+                key={src}
+                onClick={() => toggleSource(src)}
+                className={`w-full px-5 py-3 rounded-lg text-white text-sm text-left border-2 transition-all duration-200 ${
+                  selectedSources.includes(src)
+                    ? "border-blue-500 bg-[#22222a]"
+                    : "bg-[#2a2a33] border-transparent hover:border-blue-500/60 hover:bg-[#24242c]"
+                }`}
+              >
+                {src}
+              </button>
+            ))}
+          </div>
+
+          {selectedSources.includes("Other") && (
+            <div className="mt-6">
+              <label className="block text-gray-300 mb-0.5">
+                If 'Other' is selected, please specify below{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Specify source..."
+                value={sourceOtherText}
+                onChange={(e) => setSourceOtherText(e.target.value)}
+                className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.sourceOther && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.sourceOther}
                 </p>
               )}
             </div>
