@@ -40,12 +40,28 @@ export default function Declarations({
 
   // Handle file upload
   const handleFileUpload = (field, e) => {
-    const file = e.target.files[0];
-    const newData = { ...data, [field]: file };
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const base64String = reader.result.split(",")[1]; // remove data:mime;base64,
+    
+    const fileData = {
+      name: file.name,
+      base64: base64String,
+    };
+
+    const newData = { ...data, [field]: fileData };
     setData(newData);
     updateFormData(newData);
-    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on file upload
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
+
+  reader.readAsDataURL(file);
+};
+
 
   // Reusable Yes/No buttons
   const yesNoButton = (field) => (
