@@ -101,19 +101,31 @@ export default function Employment({
 
   // SOF and SOW options
   const sourceOfFundsOptions = [
-    "Salary",
-    "Investment Income",
-    "Business Revenue",
-    "Loan",
-    "Other",
+    "Employment income",
+"Gift/Donation",
+"Grant",
+"Inheritance/Trust",
+"Investment returns",
+"Loan or credit",
+"Lottery/Gaming/Casino Winnings",
+"Marital Assets",
+"Other source",
+"Investor Capital",
+"Debt Capital",
+"Sale of assets",
+"Savings"
+
   ];
 
   const sourceOfWealthOptions = [
     "Business Ownership",
-    "Investment Returns",
-    "Inheritance",
-    "Real Estate",
-    "Other",
+"Inheritance/Legacy",
+"Investments",
+"Asset Sales",
+"Retirement Funds",
+"Lottery/Gaming/Casino Winnings",
+"Other source"
+
   ];
 
   const toggleIndustry = (industry) => {
