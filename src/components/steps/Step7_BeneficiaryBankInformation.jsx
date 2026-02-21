@@ -36,7 +36,7 @@ export default function Step7_BeneficiaryBankInformation({
   const [swiftCode, setSwiftCode] = useState("");
 
   // Transaction/volume fields
-  const [sizeOfTransaction, setSizeOfTransaction] = useState("");
+  const [transactionAmount, settransactionAmount] = useState("");
   const [numOfTransaction, setNumOfTransaction] = useState("");
   const [fiatVolume, setFiatVolume] = useState("");
   const [avgTransaction, setAvgTransaction] = useState("");
@@ -95,7 +95,7 @@ export default function Step7_BeneficiaryBankInformation({
             },
           ]
     );
-    setSizeOfTransaction(data.sizeOfTransaction ?? "");
+    settransactionAmount(data.transactionAmount ?? "");
     setNumOfTransaction(data.numOfTransaction ?? "");
     setFiatVolume(data.fiatVolume ?? "");
     setAvgTransaction(data.avgTransaction ?? "");
@@ -122,10 +122,10 @@ export default function Step7_BeneficiaryBankInformation({
           bankZip,
           swiftCode,
           accounts,
-          sizeOfTransaction,
-          numOfTransaction,
-          fiatVolume,
-          avgTransaction,
+          transactionAmount,
+          // numOfTransaction,
+          // fiatVolume,
+          // avgTransaction,
           addAnotherAccount: selectedOption,
         },
       });
@@ -146,7 +146,7 @@ export default function Step7_BeneficiaryBankInformation({
     bankZip,
     swiftCode,
     accounts,
-    sizeOfTransaction,
+    transactionAmount,
     numOfTransaction,
     fiatVolume,
     avgTransaction,
@@ -233,10 +233,10 @@ export default function Step7_BeneficiaryBankInformation({
     }
 
     // Expected volumes
-    if (!sizeOfTransaction.toString().trim()) e.sizeOfTransaction = "Size of first transaction is required.";
-    if (!numOfTransaction.toString().trim()) e.numOfTransaction = "Number of transactions per month is required.";
-    if (!fiatVolume.toString().trim()) e.fiatVolume = "Monthly fiat volume is required.";
-    if (!avgTransaction.toString().trim()) e.avgTransaction = "Average transaction size is required.";
+    if (!transactionAmount.toString().trim()) e.transactionAmount = "Transaction amount is required.";
+    // if (!numOfTransaction.toString().trim()) e.numOfTransaction = "Number of transactions per month is required.";
+    // if (!fiatVolume.toString().trim()) e.fiatVolume = "Monthly fiat volume is required.";
+    // if (!avgTransaction.toString().trim()) e.avgTransaction = "Average transaction size is required.";
 
     return e;
   };
@@ -592,18 +592,18 @@ export default function Step7_BeneficiaryBankInformation({
 
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-gray-300 mb-0.5">Size of first transaction <span className="text-red-500">*</span></label>
+                <label className="block text-gray-300 mb-0.5">Transaction amount <span className="text-red-500">*</span></label>
                 <input
                   type="text"
-                  placeholder="Expected size of first transaction"
-                  value={sizeOfTransaction}
-                  onChange={(e) => setSizeOfTransaction(e.target.value)}
+                  placeholder="Expected transaction amount"
+                  value={transactionAmount}
+                  onChange={(e) => settransactionAmount(e.target.value)}
                   className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2"
                 />
-                {renderError("sizeOfTransaction")}
+                {renderError("transactionAmount")}
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-gray-300 mb-0.5">Number of transactions per month <span className="text-red-500">*</span></label>
                 <input
                   type="text"
@@ -637,7 +637,7 @@ export default function Step7_BeneficiaryBankInformation({
                   className="w-full bg-[#2a2a33] text-gray-100 rounded-lg px-4 py-2"
                 />
                 {renderError("avgTransaction")}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

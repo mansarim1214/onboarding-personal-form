@@ -21,13 +21,6 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState("");
 
 
-// useEffect(() => {
-
-//   if (step > 6) {
-//     // optional: handle switching from business → personal
-//     setStep(1);
-//   }
-// }, [formData.accountType]);
 
 
   const triggerIndustries = [
@@ -80,8 +73,9 @@ export default function App() {
     1, // Contact Details (Step 1)
     2, // Employment (Step 3, skipping Step 2)
     3, // Beneficiary Bank Information
-    4, // Wallet Information
-    5, // Personal Declarations
+    4, // Personal Declaration
+    
+    
     ...(shouldShowEDD(data) ? [13] : []), // Enhanced Due Diligence (if applicable)
   ];
 };
@@ -99,11 +93,7 @@ export default function App() {
     return;
   }
 
-  // Skip Step 2 and move directly from Step 1 to Step 3
-  // if (step === 1) {
-  //   setStep(3);
-  //   return;
-  // }
+ 
 
   setStep(activeSteps[currentIndex + 1]);
 };
@@ -192,18 +182,21 @@ return (
           />
         )}
 
-        {/* Step 9 */}
-        {step === 4 && (
-          <Step8_WalletInformation
-            nextStep={nextStep}
-            prevStep={prevStep}
-            updateFormData={updateFormData}
-            formData={formData}
-          />
-        )}
+        {/* Step 9
+        // {step === 4 && (
+        //   <Step8_WalletInformation
+        //     nextStep={nextStep}
+        //     prevStep={prevStep}
+        //     updateFormData={updateFormData}
+        //     formData={formData}
+        //   />
+        // )} */}
+
+
+  
 
         {/* Personal Declarations */}
-        {step === 5 &&(
+        {step === 4 &&(
           <Declarations
             nextStep={nextStep}
             prevStep={prevStep}

@@ -7,9 +7,9 @@ export default function ProgressBar({ currentStep = 1, activeSteps = [], totalSt
     2: "Employment",
    
    3: "Beneficiary Bank Information",
-    4: "Wallet Information",
+    // 4: "Wallet Information",
    
-    5: "Personal Declarations",
+    4: "Personal Declarations",
    
   };
 

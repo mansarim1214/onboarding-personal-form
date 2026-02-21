@@ -11,17 +11,90 @@ export default function Declarations({
     PersonFinancialSanctions: "",
     PersonIsPEP: "",
     PersonChargedWithCrime: "",
-    SOFFile: null, // State for Source of Funds file
-    SOWFile: null, // State for Source of Wealth file
+
+    HighRiskCountriesActivity: "",
+
+    AcceptingCriminalProceeds: "",
+    TerroristAssociation: "",
+    AnonymousAccounts: "",
+    AssetsFromMinors: "",
+    BinaryOptions: "",
+    BanknotesSales: "",
+    VirtualMixers: "",
+    AssociatedWithPEPs: "",
+    DrugsActivity: "",
+    ShellBanks: "",
+    CorrespondentBanks: "",
+    ArmsDefense: "",
+    PiracyMedia: "",
+    AdultEntertainment: "",
+    CounterfeitGoods: "",
+    PyramidSchemes: "",
+
+    SOFFile: null,
+    SOWFile: null,
+
+
+    TermsNoAdverseFraudMedia: false,
+TermsOccupationUpdate: false,
+TermsKYCUpdate: false,
+TermsNoPrivacyCoins: false,
+TermsBSAAcknowledgement: false,
+TermsAuthorization: false,
+TermsCertificateStatement: false,
+TermsPrivacyConsent: false,
+TermsNoThirdParty: false,
+TermsAcceptTnC: false,
+TermsAcceptPrivacy: false,
+TermsAcceptAML: false,
+TermsInformationAccurate: false,
   });
 
   const [errors, setErrors] = useState({
     PersonFinancialSanctions: "",
     PersonIsPEP: "",
     PersonChargedWithCrime: "",
+    HighRiskCountriesActivity: "",
+    AcceptingCriminalProceeds: "",
+    TerroristAssociation: "",
+    AnonymousAccounts: "",
+    AssetsFromMinors: "",
+    BinaryOptions: "",
+    BanknotesSales: "",
+    VirtualMixers: "",
+    AssociatedWithPEPs: "",
+    DrugsActivity: "",
+    ShellBanks: "",
+    CorrespondentBanks: "",
+    ArmsDefense: "",
+    PiracyMedia: "",
+    AdultEntertainment: "",
+    CounterfeitGoods: "",
+    PyramidSchemes: "",
     SOFFile: "",
     SOWFile: "",
+
+    TermsNoAdverseFraudMedia: "",
+TermsOccupationUpdate: "",
+TermsKYCUpdate: "",
+TermsNoPrivacyCoins: "",
+TermsBSAAcknowledgement: "",
+TermsAuthorization: "",
+TermsPrivacyConsent: "",
+TermsNoThirdParty: "",
+TermsAcceptTnC: "",
+TermsAcceptPrivacy: "",
+TermsAcceptAML: "",
+TermsInformationAccurate: "",
   });
+
+
+  const handleCheckbox = (field) => {
+  const newData = { ...data, [field]: !data[field] };
+  setData(newData);
+  updateFormData(newData);
+  setErrors((prev) => ({ ...prev, [field]: "" }));
+};
 
   // Load saved data if exists
   useEffect(() => {
@@ -40,28 +113,27 @@ export default function Declarations({
 
   // Handle file upload
   const handleFileUpload = (field, e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = () => {
-    const base64String = reader.result.split(",")[1]; // remove data:mime;base64,
-    
-    const fileData = {
-      name: file.name,
-      base64: base64String,
+    reader.onload = () => {
+      const base64String = reader.result.split(",")[1]; // remove data:mime;base64,
+
+      const fileData = {
+        name: file.name,
+        base64: base64String,
+      };
+
+      const newData = { ...data, [field]: fileData };
+      setData(newData);
+      updateFormData(newData);
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     };
 
-    const newData = { ...data, [field]: fileData };
-    setData(newData);
-    updateFormData(newData);
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+    reader.readAsDataURL(file);
   };
-
-  reader.readAsDataURL(file);
-};
-
 
   // Reusable Yes/No buttons
   const yesNoButton = (field) => (
@@ -87,35 +159,70 @@ export default function Declarations({
       PersonFinancialSanctions: "",
       PersonIsPEP: "",
       PersonChargedWithCrime: "",
+      HighRiskCountriesActivity: "",
+      AcceptingCriminalProceeds: "",
+      TerroristAssociation: "",
+      AnonymousAccounts: "",
+      AssetsFromMinors: "",
+      BinaryOptions: "",
+      BanknotesSales: "",
+      VirtualMixers: "",
+      AssociatedWithPEPs: "",
+      DrugsActivity: "",
+      ShellBanks: "",
+      CorrespondentBanks: "",
+      ArmsDefense: "",
+      PiracyMedia: "",
+      AdultEntertainment: "",
+      CounterfeitGoods: "",
+      PyramidSchemes: "",
       SOFFile: "",
       SOWFile: "",
+
+      
     };
+
     let hasError = false;
 
-    // Validate each required field
-    if (!data.PersonFinancialSanctions) {
-      newErrors.PersonFinancialSanctions =
-        "Please select Yes or No for this question.";
-      hasError = true;
-    }
-    if (!data.PersonIsPEP) {
-      newErrors.PersonIsPEP = "Please select Yes or No for this question.";
-      hasError = true;
-    }
-    if (!data.PersonChargedWithCrime) {
-      newErrors.PersonChargedWithCrime =
-        "Please select Yes or No for this question.";
-      hasError = true;
-    }
-    // Validate file upload
+    // 🔹 Validate all Yes/No fields
+    Object.keys(newErrors).forEach((field) => {
+      if (field !== "SOFFile" && field !== "SOWFile" && !data[field]) {
+        newErrors[field] = "Please select Yes or No for this question.";
+        hasError = true;
+      }
+    });
+
+    // 🔹 Validate Files
     if (!data.SOFFile) {
       newErrors.SOFFile = "Please upload a file for Source of Funds.";
       hasError = true;
     }
+
     if (!data.SOWFile) {
       newErrors.SOWFile = "Please upload a file for Source of Wealth.";
       hasError = true;
     }
+
+    const requiredTerms = [
+  "TermsNoAdverseFraudMedia",
+  "TermsOccupationUpdate",
+  "TermsNoPrivacyCoins",
+  "TermsBSAAcknowledgement",
+  "TermsAuthorization",
+  "TermsPrivacyConsent",
+  "TermsNoThirdParty",
+  "TermsAcceptTnC",
+  "TermsAcceptPrivacy",
+  "TermsAcceptAML",
+  "TermsInformationAccurate",
+];
+
+requiredTerms.forEach((field) => {
+  if (!data[field]) {
+    newErrors[field] = "You must accept this term.";
+    hasError = true;
+  }
+});
 
     setErrors(newErrors);
 
@@ -180,7 +287,88 @@ export default function Declarations({
             )}
           </div>
 
-          {/* File Upload Section (at the end) */}
+          <div>
+            <div className="flex flex-col flex-col-reverse sm:flex-row sm:items-start gap-4">
+              {yesNoButton("HighRiskCountriesActivity")}
+              <p className="text-gray-300">
+                Do you conduct any financial activity with individuals or
+                businesses which reside in:
+                <br />
+                Afghanistan, Angola, Belarus, Burundi, Cambodia, Central African
+                Republic, Chad, The Democratic Republic of the Congo, Equatorial
+                Guinea, Eritrea, Guinea-Bissau, Haiti, Islamic Republic Of Iran,
+                Iraq, People's Democratic Republic Lao, Lebanon, Libyan Arab
+                Jamahiriya, Myanmar, Nigeria, North Korea, Papua New Guinea,
+                Russian Federation, Somalia, Sudan, Syrian Arab Republic,
+                Tajikistan, Turkmenistan, Venezuela, Western Sahara, Yemen,
+                Zimbabwe
+                <span className="text-red-500">*</span>
+              </p>
+            </div>
+            {errors.HighRiskCountriesActivity && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.HighRiskCountriesActivity}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <p className="text-gray-300 mb-4">
+              Do you engage or are associated with:
+            </p>
+
+            {[
+              [
+                "AcceptingCriminalProceeds",
+                "Accepting assets that are known or suspected to be the proceeds of criminal activity",
+              ],
+              [
+                "TerroristAssociation",
+                "Entering into/maintain business relationships with individuals or entities known or suspected to be a terrorist or a criminal organisation or member of such or listed on sanction lists",
+              ],
+              [
+                "AnonymousAccounts",
+                "Maintaining anonymous accounts, accounts for shell banks or pay-through accounts",
+              ],
+              [
+                "AssetsFromMinors",
+                "Accepting assets from individuals below the age of 18",
+              ],
+              ["BinaryOptions", "Binary Options"],
+              ["BanknotesSales", "Banknotes sales"],
+              ["VirtualMixers", "Virtual mixers"],
+              ["AssociatedWithPEPs", "PEPs"],
+              [
+                "DrugsActivity",
+                "Marijuana or Drugs and the use of a drug or drug-like substance",
+              ],
+              ["ShellBanks", "Shell Banks"],
+              ["CorrespondentBanks", "Correspondent Banks"],
+              ["ArmsDefense", "Arms/Defense"],
+              ["PiracyMedia", "Illegal / piracy audio or video recordings"],
+              [
+                "AdultEntertainment",
+                "Red light or Adult Entertainment business",
+              ],
+              ["CounterfeitGoods", "Infringing goods (counterfeit goods)"],
+              ["PyramidSchemes", "pyramid schemes"],
+            ].map(([field, label]) => (
+              <div key={field} className="mb-6">
+                <div className="flex flex-col flex-col-reverse sm:flex-row sm:items-start gap-4">
+                  {yesNoButton(field)}
+                  <p className="text-gray-300">
+                    {label} <span className="text-red-500">*</span>
+                  </p>
+                </div>
+
+                {errors[field] && (
+                  <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
+                )}
+              </div>
+            ))}
+          </div>
+
+           {/* File Upload Section (at the end) */}
           <div className="mt-10 space-y-6">
             {/* SOF File Upload */}
             <div>
@@ -212,6 +400,44 @@ export default function Declarations({
               )}
             </div>
           </div>
+
+          <div className="mt-12 space-y-4">
+  <h2 className="text-2xl font-semibold text-white">
+    Terms and Conditions
+  </h2>
+
+  {[
+    ["TermsNoAdverseFraudMedia", "To your best knowledge you not aware of adverse fraud media related to you"],
+    ["TermsOccupationUpdate", "You will provide updates within 30 days of any change in occupation"],
+    ["TermsKYCUpdate", "If requested you will provide KYC updates with 14days from request."],
+    ["TermsNoPrivacyCoins", "The crypto wallet(s) provided will not conduct transactions with any privacy coins and/or mixers."],
+    ["TermsBSAAcknowledgement", "I acknowledge that Done.com Inc and/or its partner Banks and Trusts might be required by law to carry out all necessary security and customer due diligence checks on all parties involved for purposes of this application in compliance with the Bank Secrecy Act (“BSA”), and all Laws and regulations relating to AML, KYC, KYB, counter-terrorist financing, sanctions screening requirements, or any other legal obligations."],
+    ["TermsAuthorization", "I agree and authorize Done.com Inc and its partner Banks and Trusts to make, directly or through any third-party, any inquiries that Done.com Inc or its Partner Banks and Trusts considers necessary to validate the information provided, including checking commercial databases or credit reports.  I further authorize Done.com Inc and its partner Banks and Trusts to take such steps as they deem necessary to comply with their legal obligations; and acknowledge and agrees that Done.com Inc or its partner Banks and Trusts may, from time to time, be required to disclose this application’s information to third-parties."],
+    ["TermsCertificateStatement", "I have made, or caused to be made, such examinations or investigations as are, in my opinion, necessary to make the statements contained in this certificate and I have furnished this certificate with the intent that it may be relied on by Done.com Inc."],
+    ["TermsPrivacyConsent", "To the extent that the attachments to this form include personal information, I have obtained all necessary consents from the individuals about whom such information relates to allow Done.com Inc. to collect, use and disclose the personal information for the purposes described in the Done.com Inc. Privacy Policy."],
+    ["TermsNoThirdParty", "In its dealings with Done.com Inc you confirm that you are not acting on behalf of a third party."],
+    ["TermsAcceptTnC", "I accept the Terms and Conditions"],
+    ["TermsAcceptPrivacy", "I accept the Privacy Policy"],
+    ["TermsAcceptAML", "I accept the AML Policy"],
+    ["TermsInformationAccurate", "I certify that all information provided is accurate and complete"],
+  ].map(([field, label]) => (
+    <div key={field}>
+      <label className="flex items-start gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={data[field]}
+          onChange={() => handleCheckbox(field)}
+          className="mt-1"
+        />
+        <span className="text-gray-300">{label}</span>
+      </label>
+
+      {errors[field] && (
+        <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
+      )}
+    </div>
+  ))}
+</div>
         </div>
 
         {/* Navigation */}
